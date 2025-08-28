@@ -62,6 +62,12 @@
    document.querySelector("#op").addEventListener("change", () => {
       const opText = document.querySelector("#table-op");
       opText.innerHTML = "p " + document.getElementById("op").value +  " q";
+
+      const inputs = document.querySelectorAll("#truth-table tbody tr input");
+      inputs.forEach((row) => {
+        row.className = "";
+        row.value = "";
+      });
    })
 
     document.querySelector("#check").addEventListener("click", () => {
