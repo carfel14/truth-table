@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Tabla de Verdad</title>
+        <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+    <style>
+    .correct {
+    background: #d1fae5;
+    color: #065f46;    
+    }
+    .wrong {
+    background: #fee2e2; 
+    color: #991b1b;    
+    }
+    </style>
+</head>
+<body>
+    <main class="container-fluid">
+        
+        <h2>Tabla de verdad</h2>
+
+        <label for="op">Operación:</label>
+        <select onchange="updateOp()" id="op">
+            <option value="∧">Conjunción (∧)</option>
+            <option value="∨">Disyunción (∨)</option>
+            <option value="→">Implicación (→)</option>
+            <option value="↔">Si y solo si (↔)</option>
+        </select>
+
+        <table id="truth-table">
+            <thead>
+            <tr>
+                <th>p</th><th>q</th><th id="table-op">p ∧ q</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><td>V</td><td>V</td><td><input type="text"></td></tr>
+            <tr><td>V</td><td>F</td><td><input type="text"></td></tr>
+            <tr><td>F</td><td>V</td><td><input type="text"></td></tr>
+            <tr><td>F</td><td>F</td><td><input type="text"></td></tr>
+            </tbody>
+        </table>
+
+        <button id="check">Verificar</button>
+    </main>
+  <script>
+    function evalOp(p, q, op) {
+      switch (op) {
+        case "∧": return p && q;       
+        case "∨":  return p || q;       
+        case "→": return !(p == true && q == false);        
+        case "↔": return p === q;         
+      }
+    }
+
+    function toVF(b) { return b ? "V" : "F"; }
+    
+   document.querySelector("#op").addEventListener("change", () => {
+      const opText = document.querySelector("#table-op");
+      opText.innerHTML = "p " + document.getElementById("op").value +  " q";
+   })
+
+    document.querySelector("#check").addEventListener("click", () => {
+      const op = document.querySelector("#op").value;
+      const rows = document.querySelectorAll("#truth-table tbody tr");
+      const cases = [
+        [true, true],
+        [true, false],
+        [false, true],
+        [false, false],
+      ];
+
+      rows.forEach((row, i) => {
+        const input = row.querySelector("input");
+        const [p, q] = cases[i];
+        const correct = toVF(evalOp(p, q, op));
+        if (input.value.trim().toUpperCase() === correct) {
+          input.className = "correct";
+        } else {
+          input.className = "wrong";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
